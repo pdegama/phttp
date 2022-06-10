@@ -13,7 +13,7 @@ make-dir:
 	echo "Make Build Dir..."
 
 build-phttp: phttp.h phttp.c
-	$(CC) $(CFLAGS) -c -o $(PHTTP) phttp.c
+	$(CC) $(CFLAGS) -D_POSIX_C_SOURCE=199309L -c -o $(PHTTP) phttp.c
 	echo "Build phttp successful"
 
 build-test: test.c $(PHTTP)
