@@ -20,7 +20,7 @@ build-test: test.c $(PHTTP)
 	$(CC) $(CGLAGS) -o build/test test.c $(PHTTP)
 	echo "Build test successful"
 
-run:
+run: build
 	./build/test
 
 clean:
