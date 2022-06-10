@@ -1,5 +1,3 @@
-See `httpserver.h` for API documentation
-
 # Description
 
 httpserver.h is a single header C library for building event driven non-blocking HTTP servers
