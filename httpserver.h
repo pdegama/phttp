@@ -283,26 +283,6 @@ struct http_string_s http_request_chunk(struct http_request_s* request);
 }
 #endif
 
-// Minimal example usage.
-#ifdef HTTPSERVER_EXAMPLE
-
-#define RESPONSE "Hello, World!"
-
-void handle_request(struct http_request_s* request) {
-  struct http_response_s* response = http_response_init();
-  http_response_status(response, 200);
-  http_response_header(response, "Content-Type", "text/plain");
-  http_response_body(response, RESPONSE, sizeof(RESPONSE) - 1);
-  http_respond(request, response);
-}
-
-int main() {
-  struct http_server_s* server = http_server_init(8080, handle_request);
-  http_server_listen(server);
-}
-
-#endif
-
 #endif
 
 #ifdef HTTPSERVER_IMPL
@@ -1220,7 +1200,7 @@ void http_listen(http_server_t* serv, const char* ipaddr) {
   signal(SIGPIPE, SIG_IGN);
   serv->socket = socket(AF_INET, SOCK_STREAM, 0);
   int flag = 1;
-  setsockopt(serv->socket, SOL_SOCKET, SO_REUSEPORT, &flag, sizeof(flag));
+  setsockopt(serv->socket, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
   hs_bind_localhost(serv->socket, &serv->addr, ipaddr, serv->port);
   serv->len = sizeof(serv->addr);
   int flags = fcntl(serv->socket, F_GETFL, 0);
