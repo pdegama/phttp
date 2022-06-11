@@ -16,15 +16,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="add POSIX standerd">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/phttp.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/htest" afterDir="false" />
+    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="add io">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/build/phttp" beforeDir="false" afterPath="$PROJECT_DIR$/src/build/phttp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/build/test" beforeDir="false" afterPath="$PROJECT_DIR$/src/build/test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/phttp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/phttp.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/phttp.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/phttp.h" afterDir="false" />
     </list>
@@ -61,19 +55,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/home/parthka/CLionProjects/phttp/src/Makefile",
-    "nodejs_package_manager_path": "npm",
-    "structure.view.defaults.are.configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/parthka/CLionProjects/phttp/src/Makefile&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -123,7 +117,9 @@
       <workItem from="1654862474712" duration="4095000" />
       <workItem from="1654866585213" duration="169000" />
       <workItem from="1654875017806" duration="10816000" />
-      <workItem from="1654935965140" duration="5691000" />
+      <workItem from="1654935965140" duration="6172000" />
+      <workItem from="1654943252674" duration="530000" />
+      <workItem from="1654952996584" duration="5615000" />
     </task>
     <task id="LOCAL-00001" summary="add test">
       <created>1654875665547</created>
@@ -160,7 +156,28 @@
       <option name="project" value="LOCAL" />
       <updated>1654885828309</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add POSIX standerd">
+      <created>1654941925003</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1654941925003</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add io">
+      <created>1654941943279</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1654941943279</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add io">
+      <created>1654942000592</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1654942000592</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,6 +200,7 @@
     <MESSAGE value="change make file" />
     <MESSAGE value="learn" />
     <MESSAGE value="add POSIX standerd" />
-    <option name="LAST_COMMIT_MESSAGE" value="add POSIX standerd" />
+    <MESSAGE value="add io" />
+    <option name="LAST_COMMIT_MESSAGE" value="add io" />
   </component>
 </project>
