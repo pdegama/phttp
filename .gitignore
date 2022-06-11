@@ -3,3 +3,5 @@ valgrind-log.txt
 test-results.txt
 valgrind-results.txt
 http-server.dSYM/
+tmp/
+a.out
