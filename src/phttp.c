@@ -18,7 +18,7 @@ typedef struct {
     int type;
 } http_token_t;
 
-typedef struct {
+typedef struct http_token_dyn_s {
     http_token_t* buf;
     int capacity;
     int size;
@@ -74,6 +74,7 @@ typedef struct http_request_s {
     http_token_dyn_t tokens;
     char flags;
 } http_request_t;
+
 
 void hs_bind_localhost(int s, struct sockaddr_in* addr, const char* ipaddr, int port) {
     addr->sin_family = AF_INET;
@@ -158,6 +159,72 @@ void hs_server_init(http_server_t* serv) {
 
 void hs_server_listen_cb(struct epoll_event* ev) {
     hs_accept_connections((http_server_t*)ev->data.ptr);
+}
+
+void hs_session_io_cb(struct epoll_event* ev) {
+    http_session((http_request_t*)ev->data.ptr);
+}
+
+void hs_end_session(http_request_t* session) {
+    hs_delete_events(session);
+    close(session->socket);
+    hs_free_buffer(session);
+    free(session->tokens.buf);
+    session->tokens.buf = NULL;
+    free(session);
+}
+
+void hs_free_buffer(http_request_t* session) {
+    if (session->stream.buf) {
+        free(session->stream.buf);
+        session->server->memused -= session->stream.capacity;
+        session->stream.buf = NULL;
+    }
+}
+
+void hs_delete_events(http_request_t* request) {
+    epoll_ctl(request->server->loop, EPOLL_CTL_DEL, request->socket, NULL);
+    epoll_ctl(request->server->loop, EPOLL_CTL_DEL, request->timerfd, NULL);
+    close(request->timerfd);
+}
+
+void http_session(http_request_t* request) {
+    switch (request->state) {
+        case HTTP_SESSION_INIT:
+            hs_init_session(request);
+            request->state = HTTP_SESSION_READ;
+            if (request->server->memused > HTTP_MAX_TOTAL_EST_MEM_USAGE) {
+                return hs_error_response(request, 503, "Service Unavailable");
+            }
+            // fallthrough
+        case HTTP_SESSION_READ:
+            hs_read_and_process_request(request);
+            break;
+        case HTTP_SESSION_WRITE:
+            hs_write_response(request);
+            break;
+    }
+    if (HTTP_FLAG_CHECK(request->flags, HTTP_END_SESSION)) {
+        hs_end_session(request);
+    }
+}
+
+void hs_init_session(http_request_t* session) {
+    session->flags = HTTP_AUTOMATIC;
+    session->parser = (http_parser_t){ };
+    session->stream = (hs_stream_t){ };
+    if (session->tokens.buf) {
+        free(session->tokens.buf);
+        session->tokens.buf = NULL;
+    }
+    http_token_dyn_init(&session->tokens, 32);
+}
+
+void http_token_dyn_init(http_token_dyn_t* dyn, int capacity) {
+    dyn->buf = (http_token_t*)malloc(sizeof(http_token_t) * capacity);
+    assert(dyn->buf != NULL);
+    dyn->size = 0;
+    dyn->capacity = capacity;
 }
 
 void hs_accept_connections(http_server_t* server) {
