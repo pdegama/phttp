@@ -6,3 +6,5 @@ http-server.dSYM/
 tmp/
 **/a.out
 /a.out
+*.bin
+*.o
