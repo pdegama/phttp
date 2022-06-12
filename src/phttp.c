@@ -4,6 +4,7 @@
 
 #include "stdio.h"
 #include "phttp.h"
+#include "time.h"
 
 typedef void (*epoll_cb_t)(struct epoll_event*);
 
@@ -122,6 +123,22 @@ int http_server_listen(http_server_t* serv) {
     return 0;
 }
 
+void hs_generate_date_time(char* datetime) {
+    time_t rawtime;
+    struct tm * timeinfo;
+    time(&rawtime);
+    timeinfo = gmtime(&rawtime);
+    strftime(datetime, 32, "%a, %d %b %Y %T GMT", timeinfo);
+}
+
+void hs_server_timer_cb(struct epoll_event* ev) {
+    http_server_t* server = (http_server_t*)((char*)ev->data.ptr - sizeof(epoll_cb_t));
+    uint64_t res;
+    int bytes = read(server->timerfd, &res, sizeof(res));
+    (void)bytes; // suppress warning
+    hs_generate_date_time(server->date);
+}
+
 void hs_server_init(http_server_t* serv) {
     serv->loop = epoll_create1(0);
     serv->timer_handler = hs_server_timer_cb;
@@ -139,15 +156,38 @@ void hs_server_init(http_server_t* serv) {
     serv->timerfd = tfd;
 }
 
+void hs_server_listen_cb(struct epoll_event* ev) {
+    hs_accept_connections((http_server_t*)ev->data.ptr);
+}
+
+void hs_accept_connections(http_server_t* server) {
+    int sock = 0;
+    do {
+        sock = accept(server->socket, (struct sockaddr *)&server->addr, &server->len);
+        if (sock > 0) {
+            http_request_t* session = (http_request_t*)calloc(1, sizeof(http_request_t));
+            assert(session != NULL);
+            session->socket = sock;
+            session->server = server;
+            session->timeout = HTTP_REQUEST_TIMEOUT;
+            session->handler = hs_session_io_cb;
+            int flags = fcntl(sock, F_GETFL, 0);
+            fcntl(sock, F_SETFL, flags | O_NONBLOCK);
+            hs_add_events(session);
+            http_session(session);
+        }
+    } while (sock > 0);
+}
+
 // init server
 http_server_t* http_server_init(int port, void (*handler)(http_request_t*)) {
     http_server_t* serv = (http_server_t*)malloc(sizeof(http_server_t));
     assert(serv != NULL);
     serv->port = port;
     serv->memused = 0;
-    //serv->handler = hs_server_listen_cb;
+    serv->handler = hs_server_listen_cb;
     hs_server_init(serv);
-    //hs_generate_date_time(serv->date);
+    hs_generate_date_time(serv->date);
     serv->request_handler = handler;
     return serv;
 }
