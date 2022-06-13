@@ -272,10 +272,117 @@ typedef struct grwprintf_s {
     int64_t* memused;
 } grwprintf_t;
 
-typedef struct http_string_s {
-    char const * buf;
-    int len;
-} http_string_t;
+void http_respond_chunk(
+        http_request_t* request,
+        http_response_t* response,
+        void (*cb)(http_request_t*)
+) {
+    grwprintf_t printctx;
+    grwprintf_init(&printctx, HTTP_RESPONSE_BUF_SIZE, &request->server->memused);
+    if (!HTTP_FLAG_CHECK(request->flags, HTTP_CHUNKED_RESPONSE)) {
+        HTTP_FLAG_SET(request->flags, HTTP_CHUNKED_RESPONSE);
+        http_response_header(response, "Transfer-Encoding", "chunked");
+        http_respond_headers(request, response, &printctx);
+    }
+    request->chunk_cb = cb;
+    grwprintf(&printctx, "%X\r\n", response->content_length);
+    grwmemcpy(&printctx, response->body, response->content_length);
+    grwprintf(&printctx, "\r\n");
+    http_end_response(request, response, &printctx);
+}
+
+void http_respond_chunk_end(http_request_t* request, http_response_t* response) {
+    grwprintf_t printctx;
+    grwprintf_init(&printctx, HTTP_RESPONSE_BUF_SIZE, &request->server->memused);
+    grwprintf(&printctx, "0\r\n");
+    http_buffer_headers(request, response, &printctx);
+    grwprintf(&printctx, "\r\n");
+    HTTP_FLAG_CLEAR(request->flags, HTTP_CHUNKED_RESPONSE);
+    http_end_response(request, response, &printctx);
+}
+
+void http_request_set_userdata(http_request_t* request, void* data) {
+    request->data = data;
+}
+
+void http_request_read_chunk(
+        struct http_request_s* request,
+        void (*chunk_cb)(struct http_request_s*)
+) {
+    request->chunk_cb = chunk_cb;
+    hs_read_and_process_request(request);
+}
+
+int http_request_iterate_headers(
+        http_request_t* request,
+        http_string_t* key,
+        http_string_t* val,
+        int* iter
+) {
+    if (*iter == 0) {
+        for ( ; *iter < request->tokens.size; (*iter)++) {
+            http_token_t token = request->tokens.buf[*iter];
+            if (token.type == HS_TOK_HEADER_KEY) {
+                return hs_assign_iteration_headers(request, key, val, iter);
+            }
+        }
+        return 0;
+    } else {
+        (*iter)++;
+        return hs_assign_iteration_headers(request, key, val, iter);
+    }
+}
+
+int hs_assign_iteration_headers(
+        http_request_t* request,
+        http_string_t* key,
+        http_string_t* val,
+        int* iter
+) {
+    http_token_t token = request->tokens.buf[*iter];
+    if (request->tokens.buf[*iter].type == HS_TOK_BODY) return 0;
+    *key = (http_string_t) {
+            .buf = &request->stream.buf[token.index],
+            .len = token.len
+    };
+    (*iter)++;
+    token = request->tokens.buf[*iter];
+    *val = (http_string_t) {
+            .buf = &request->stream.buf[token.index],
+            .len = token.len
+    };
+    return 1;
+}
+
+http_string_t http_request_target(http_request_t* request) {
+    return http_get_token_string(request, HS_TOK_TARGET);
+}
+
+http_string_t http_request_body(http_request_t* request) {
+    return http_get_token_string(request, HS_TOK_BODY);
+}
+
+void http_request_connection(http_request_t* request, int directive) {
+    if (directive == HTTP_KEEP_ALIVE) {
+        HTTP_FLAG_CLEAR(request->flags, HTTP_AUTOMATIC);
+        HTTP_FLAG_SET(request->flags, HTTP_KEEP_ALIVE);
+    } else if (directive == HTTP_CLOSE) {
+        HTTP_FLAG_CLEAR(request->flags, HTTP_AUTOMATIC);
+        HTTP_FLAG_CLEAR(request->flags, HTTP_KEEP_ALIVE);
+    }
+}
+
+void* http_request_userdata(http_request_t* request) {
+    return request->data;
+}
+
+http_string_t http_request_chunk(struct http_request_s* request) {
+    http_token_t token = request->tokens.buf[request->tokens.size - 1];
+    return (http_string_t) {
+            .buf = &request->stream.buf[token.index],
+            .len = token.len
+    };
+}
 
 void hs_bind_localhost(int s, struct sockaddr_in* addr, const char* ipaddr, int port) {
     addr->sin_family = AF_INET;

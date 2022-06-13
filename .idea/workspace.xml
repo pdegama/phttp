@@ -17,7 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="13/06/2022">
+      <change afterPath="$PROJECT_DIR$/src/test2.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/src/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/phttp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/phttp.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/phttp.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/phttp.h" afterDir="false" />
     </list>
@@ -122,7 +124,7 @@
       <workItem from="1655002943586" duration="3153000" />
       <workItem from="1655049355132" duration="6501000" />
       <workItem from="1655121939939" duration="9204000" />
-      <workItem from="1655139022982" duration="2617000" />
+      <workItem from="1655139022982" duration="4647000" />
     </task>
     <task id="LOCAL-00001" summary="add test">
       <created>1654875665547</created>
@@ -215,7 +217,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655126495331</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="13/06/2022">
+      <created>1655141894437</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1655141894437</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -121,6 +121,11 @@ typedef struct http_parser_s http_parser_t;
 typedef struct grwprintf_s grwprintf_t;
 typedef struct http_string_s http_string_t;
 
+struct http_string_s {
+    char const * buf;
+    int len;
+};
+
 int http_server_listen(struct http_server_s* server);
 int hs_stream_read_socket(hs_stream_t* stream, int socket, int64_t* memused);
 int hs_stream_next(hs_stream_t* stream, char* c);
@@ -129,6 +134,8 @@ int hs_write_client_socket(http_request_t* session);
 int hs_stream_jump(hs_stream_t* stream, int offset);
 int hs_stream_jumpall(hs_stream_t* stream);
 int hs_stream_can_contain(hs_stream_t* stream, int64_t size);
+int http_request_iterate_headers(http_request_t* request, http_string_t* key, http_string_t* val, int* iter);
+int hs_assign_iteration_headers(http_request_t* request, http_string_t* key, http_string_t* val, int* iter );
 
 void hs_bind_localhost(int s, struct sockaddr_in* addr, const char* ipaddr, int port);
 void hs_add_server_sock_events(struct http_server_s* serv);
@@ -168,8 +175,13 @@ void hs_stream_begin_token(hs_stream_t* stream, int token_type);
 void hs_stream_shift(hs_stream_t* stream);
 void hs_stream_anchor(hs_stream_t* stream);
 void hs_stream_consume(hs_stream_t* stream);
+void http_respond_chunk(http_request_t* request, http_response_t* response, void (*cb)(http_request_t*));
+void http_respond_chunk_end(http_request_t* request, http_response_t* response);
+void http_request_set_userdata(http_request_t* request, void* data);
+void http_request_read_chunk(struct http_request_s* request, void (*chunk_cb)(struct http_request_s*));
+void http_request_connection(http_request_t* request, int directive);
+void* http_request_userdata(http_request_t* request);
 
-http_response_t* http_response_init();
 http_token_t hs_stream_emit(hs_stream_t* stream);
 http_token_t hs_stream_current_token(hs_stream_t* stream);
 http_token_t http_parse(http_parser_t* parser, hs_stream_t* stream);
@@ -177,6 +189,10 @@ http_token_t hs_meta_emit(http_parser_t* parser);
 http_token_t hs_transition_action(http_parser_t* parser, hs_stream_t* stream, char c, int8_t from, int8_t to );
 http_string_t http_get_token_string(http_request_t* request, int token_type);
 http_string_t http_request_header(http_request_t* request, char const * key);
+http_string_t http_request_target(http_request_t* request);
+http_string_t http_request_body(http_request_t* request);
+http_string_t http_request_chunk(struct http_request_s* request);
 http_server_t* http_server_init(int port, void (*handler)(struct http_request_s*));
+http_response_t* http_response_init();
 
 #endif //PHTTP_PHTTP_H

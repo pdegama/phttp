@@ -5,7 +5,7 @@ PHTTP := build/phttp.o
 
 all: build
 
-build: clean make-dir build-phttp build-test
+build: clean make-dir build-phttp build-test build-test2
 	echo "Build Successful"
 
 make-dir:
@@ -18,6 +18,10 @@ build-phttp: phttp.h phttp.c
 
 build-test: test.c $(PHTTP)
 	$(CC) $(CGLAGS) -o build/test.bin test.c $(PHTTP)
+	echo "Build test successful"
+
+build-test2: test.c $(PHTTP)
+	$(CC) $(CGLAGS) -o build/test2.bin test2.c $(PHTTP)
 	echo "Build test successful"
 
 run: build
