@@ -8,4 +8,4 @@ run: all
 	./es.bin
 
 speed:
-	wrk -d 2 -t 10 -c 1000 http://localhost:8080
+	wrk -d 2 -t 10 -c 100 http://localhost:8080
