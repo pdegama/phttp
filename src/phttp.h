@@ -13,14 +13,23 @@
 #include "fcntl.h"
 #include "signal.h"
 #include "stdlib.h"
+#include "string.h"
 #include "assert.h"
 #include "netinet/in.h"
 #include "arpa/inet.h"
 #include "sys/timerfd.h"
+#include "time.h"
+#include "errno.h"
+#include "netdb.h"
+#include "stdarg.h"
+#include "signal.h"
+#include "limits.h"
 
 #define HTTP_REQUEST_TIMEOUT 20
 
 // Application configurable
+#define HTTP_KEEP_ALIVE 1
+#define HTTP_CLOSE 0
 #define HTTP_REQUEST_BUF_SIZE 1024
 #define HTTP_RESPONSE_BUF_SIZE 1024
 #define HTTP_REQUEST_TIMEOUT 20
@@ -60,13 +69,66 @@
 #define HTTP_1_0 0
 #define HTTP_1_1 1
 
+#define HTTP_FLG_STREAMED 0x1
+
+#define HS_META_NOT_CHUNKED 0
+#define HS_META_NON_ZERO 0
+#define HS_META_END_CHK_SIZE 1
+#define HS_META_END_CHUNK 2
+#define HS_META_NEXT 0
+
+#define HS_MATCH(str, meta) \
+  in_bounds = parser->match_index < (int)sizeof(str) - 1; \
+  m = in_bounds ? str[parser->match_index] : m; \
+  low = c >= 'A' && c <= 'Z' ? c + 32 : c; \
+  if (low != m) hs_trigger_meta(parser, meta);
+
+enum hs_token {
+    HS_TOK_NONE,        HS_TOK_METHOD,     HS_TOK_TARGET,     HS_TOK_VERSION,
+    HS_TOK_HEADER_KEY,  HS_TOK_HEADER_VAL, HS_TOK_CHUNK_BODY, HS_TOK_BODY,
+    HS_TOK_BODY_STREAM, HS_TOK_REQ_END,    HS_TOK_EOF,        HS_TOK_ERROR
+};
+
+enum hs_state {
+    ST, MT, MS, TR, TS, VN, RR, RN, HK, HS, HV, HR, HE,
+    ER, HN, BD, CS, CB, CE, CR, CN, CD, C1, C2, BR, HS_STATE_LEN
+};
+
+enum hs_char_type {
+    HS_SPC,   HS_NL,  HS_CR,    HS_COLN,  HS_TAB,   HS_SCOLN,
+    HS_DIGIT, HS_HEX, HS_ALPHA, HS_TCHAR, HS_VCHAR, HS_ETC,   HS_CHAR_TYPE_LEN
+};
+
+enum hs_meta_state {
+    M_WFK, M_ANY, M_MTE, M_MCL, M_CLV, M_MCK, M_SML, M_CHK, M_BIG, M_ZER, M_CSZ,
+    M_CBD, M_LST, M_STR, M_SEN, M_BDY, M_END, M_ERR
+};
+
+enum hs_meta_type {
+    HS_META_NOT_CONTENT_LEN, HS_META_NOT_TRANSFER_ENC, HS_META_END_KEY,
+    HS_META_END_VALUE,       HS_META_END_HEADERS,      HS_META_LARGE_BODY,
+    HS_META_TYPE_LEN
+};
+
 typedef struct http_server_s http_server_t;
 typedef struct http_request_s http_request_t;
 typedef struct http_token_dyn_s http_token_dyn_t;
-
-http_server_t* http_server_init(int port, void (*handler)(struct http_request_s*));
+typedef struct http_header_s http_header_t;
+typedef struct http_response_s http_response_t;
+typedef struct hs_stream_s hs_stream_t;
+typedef struct http_token_s http_token_t;
+typedef struct http_parser_s http_parser_t;
+typedef struct grwprintf_s grwprintf_t;
+typedef struct http_string_s http_string_t;
 
 int http_server_listen(struct http_server_s* server);
+int hs_stream_read_socket(hs_stream_t* stream, int socket, int64_t* memused);
+int hs_stream_next(hs_stream_t* stream, char* c);
+int hs_case_insensitive_cmp(char const * a, char const * b, int len);
+int hs_write_client_socket(http_request_t* session);
+int hs_stream_jump(hs_stream_t* stream, int offset);
+int hs_stream_jumpall(hs_stream_t* stream);
+int hs_stream_can_contain(hs_stream_t* stream, int64_t size);
 
 void hs_bind_localhost(int s, struct sockaddr_in* addr, const char* ipaddr, int port);
 void hs_add_server_sock_events(struct http_server_s* serv);
@@ -82,5 +144,39 @@ void hs_delete_events(http_request_t* request);
 void hs_free_buffer(http_request_t* session);
 void hs_init_session(http_request_t* session);
 void http_token_dyn_init(http_token_dyn_t* dyn, int capacity);
+void hs_add_events(http_request_t* request);
+void hs_request_timer_cb(struct epoll_event* ev);
+void hs_write_response(http_request_t* request);
+void hs_read_and_process_request(http_request_t* request);
+void hs_error_response(http_request_t* request, int code, char const * message);
+void hs_reset_timeout(http_request_t* request, int time);
+void http_respond(http_request_t* request, http_response_t* response);
+void http_response_body(http_response_t* response, char const * body, int length);
+void http_response_header(http_response_t* response, char const * key, char const * value);
+void http_response_status(http_response_t* response, int status);
+void http_token_dyn_push(http_token_dyn_t* dyn, http_token_t a);
+void http_end_response(http_request_t* request, http_response_t* response, grwprintf_t* printctx);
+void grwprintf_init(grwprintf_t* ctx, int capacity, int64_t* memused);
+void http_respond_headers(http_request_t* request, http_response_t* response, grwprintf_t* printctx);
+void grwprintf(grwprintf_t* ctx, char const * fmt, ...);
+void http_buffer_headers(http_request_t* request, http_response_t* response, grwprintf_t* printctx );
+void hs_auto_detect_keep_alive(http_request_t* request);
+void grwmemcpy(grwprintf_t* ctx, char const * src, int size);
+void hs_add_write_event(http_request_t* request);
+void hs_trigger_meta(http_parser_t* parser, int event);
+void hs_stream_begin_token(hs_stream_t* stream, int token_type);
+void hs_stream_shift(hs_stream_t* stream);
+void hs_stream_anchor(hs_stream_t* stream);
+void hs_stream_consume(hs_stream_t* stream);
+
+http_response_t* http_response_init();
+http_token_t hs_stream_emit(hs_stream_t* stream);
+http_token_t hs_stream_current_token(hs_stream_t* stream);
+http_token_t http_parse(http_parser_t* parser, hs_stream_t* stream);
+http_token_t hs_meta_emit(http_parser_t* parser);
+http_token_t hs_transition_action(http_parser_t* parser, hs_stream_t* stream, char c, int8_t from, int8_t to );
+http_string_t http_get_token_string(http_request_t* request, int token_type);
+http_string_t http_request_header(http_request_t* request, char const * key);
+http_server_t* http_server_init(int port, void (*handler)(struct http_request_s*));
 
 #endif //PHTTP_PHTTP_H
