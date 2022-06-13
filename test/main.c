@@ -1,8 +1,8 @@
 #define HTTPSERVER_IMPL
-#include "../httpserver.h"
+#include "httpserver.h"
 #include <signal.h>
 
-#define RESPONSE "Hello, World!"
+#define RESPONSE "Hello, Computer!"
 
 int request_target_is(struct http_request_s* request, char const * target) {
   http_string_t url = http_request_target(request);
