@@ -16,14 +16,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="13/06/2022">
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/htest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/htest.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/htest.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/httpserver.h" beforeDir="false" afterPath="$PROJECT_DIR$/test/httpserver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/main.c" afterDir="false" />
-    </list>
+    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="13/06/2022" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
