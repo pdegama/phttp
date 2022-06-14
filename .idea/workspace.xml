@@ -16,13 +16,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="clear project">
-      <change afterPath="$PROJECT_DIR$/src/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/httpserver/httpserver.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/httpserver/main.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/src/phttp.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/src/phttp.h" afterDir="false" />
+    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="init">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/src/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/phttp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/phttp.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/phttp.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/phttp.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,7 +241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655222547695</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="init">
+      <created>1655224298231</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1655224298231</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,6 +288,7 @@
     <MESSAGE value="add" />
     <MESSAGE value="13/06/2022" />
     <MESSAGE value="clear project" />
-    <option name="LAST_COMMIT_MESSAGE" value="clear project" />
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
   </component>
 </project>

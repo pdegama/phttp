@@ -8,5 +8,5 @@ tmp/
 /a.out
 *.bin
 *.o
-*/build/
-*/lib/
+build/
+lib/
