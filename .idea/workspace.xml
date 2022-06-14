@@ -16,7 +16,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="13/06/2022" />
+    <list default="true" id="4f4d859e-d179-4d95-b1dc-bd2244fa75bc" name="Changes" comment="clear project">
+      <change afterPath="$PROJECT_DIR$/src/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/httpserver/httpserver.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/httpserver/main.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src/phttp.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src/phttp.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,27 +57,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/parthka/CLionProjects/phttp/src/Makefile&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/home/parthka/CLionProjects/phttp/src",
+    "nodejs_package_manager_path": "npm",
+    "structure.view.defaults.are.configured": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/httpserver" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/io" />
-      <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
   <component name="RunManager" selected="Makefile Target.Unnamed">
@@ -226,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655143948872</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="clear project">
+      <created>1655222547695</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1655222547695</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +253,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="v0.0" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -253,6 +281,7 @@
     <MESSAGE value="add io program" />
     <MESSAGE value="add" />
     <MESSAGE value="13/06/2022" />
-    <option name="LAST_COMMIT_MESSAGE" value="13/06/2022" />
+    <MESSAGE value="clear project" />
+    <option name="LAST_COMMIT_MESSAGE" value="clear project" />
   </component>
 </project>
