@@ -10,3 +10,4 @@ tmp/
 *.o
 build/
 lib/
+.idea/
