@@ -1,5 +1,5 @@
 CC := cc
-CFLAGS :=-O3 -std=c99
+CFLAGS :=-O3
 
 all: clean build_core build_phttp test_build
 	# Make Successful...
@@ -16,10 +16,8 @@ build_phttp: src/phttp.h src
 
 test_build:
 	$(CC) $(CFLAGS) -g ./lib/phttp.o ./test/main.c -o ./build/test.bin
+	$(CC) $(CFLAGS) -g ./lib/phttp.o ./test/long.c -o ./build/long.bin
 	# Test build successful ...
-
-test_run: all
-	./build/test.bin
 
 run_core:
 	./lib/httpc.bin
