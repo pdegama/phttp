@@ -11,7 +11,6 @@ void handle_request(struct http_request_s* request) {
     http_response_status(response, 200);
     http_response_header(response, "Content-Type", "text/plain");
     http_response_body(response, RESPONSE, sizeof(RESPONSE) - 1);
-    printf("Hello, World!\n");
     http_respond(request, response);
 }
 
