@@ -9,6 +9,16 @@ int request_target_is(struct http_request_s* request, char const * target) {
   return len == url.len && memcmp(url.buf, target, url.len) == 0;
 }
 
+char path[200];
+char* request_target_path(struct http_request_s* request) {
+    http_string_t url = http_request_target(request);
+    for (int i = 0; i < url.len; i++) {
+        if (&url.buf[i] == " ") break;
+        path[i] = url.buf[i];
+    }
+    return path;
+}
+
 int chunk_count = 0;
 
 void chunk_cb(struct http_request_s* request) {
@@ -53,6 +63,7 @@ void handle_request(struct http_request_s* request) {
   http_response_status(response, 200);
   if (request_target_is(request, "/echo")) {
     http_string_t body = http_request_body(request);
+    printf("Request Body:\n%s\n", body.buf);
     http_response_header(response, "Content-Type", "text/plain");
     http_response_body(response, body.buf, body.len);
   } else if (request_target_is(request, "/host")) {
@@ -91,6 +102,7 @@ void handle_request(struct http_request_s* request) {
     http_response_body(response, buf, i);
     return http_respond(request, response);
   } else {
+    printf("Path: %s\n", request_target_path(request));
     http_response_header(response, "Content-Type", "text/plain");
     http_response_body(response, RESPONSE, sizeof(RESPONSE) - 1);
   }

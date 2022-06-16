@@ -965,6 +965,11 @@ int hs_case_insensitive_cmp(char const * a, char const * b, int len) {
 http_string_t http_get_token_string(http_request_t* request, int token_type) {
     http_string_t str = {0, 0};
     if (request->tokens.buf == NULL) return str;
+    if (token_type == HS_TOK_BODY){
+        str.buf = request->stream.buf;
+        str.len = request->stream.length;
+        return str;
+    }
     for (int i = 0; i < request->tokens.size; i++) {
         http_token_t token = request->tokens.buf[i];
         if (token.type == token_type) {
