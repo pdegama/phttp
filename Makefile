@@ -1,4 +1,4 @@
-CC := cc
+CC := gcc
 CFLAGS :=-O3
 
 all: clean build_core build_phttp test_build
